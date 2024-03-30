@@ -1,8 +1,6 @@
 import { _decorator, Component, Node } from "cc";
 const { ccclass, property } = _decorator;
 
-ccclass("contactweb");
-
 interface CallbackFunc {
   Type: string;
   callback(data: object): Promise<void>;
@@ -31,6 +29,7 @@ export interface CardMsg {
   Name: string; // Location name
 }
 
+@ccclass("contactweb")
 export class contactweb extends Component {
   static ws: WebSocket;
   static uri: string = "ws://localhost";
@@ -43,7 +42,6 @@ export class contactweb extends Component {
   static OnConnect(): void {}
   static OnDisconnect(): void {}
 
-  /////待檢查
   public static SetCallback(type: string, callback: any) {
     for (let i = 0; i < contactweb.callbackList.length; i++) {
       if (contactweb.callbackList[i].Type == type) {
@@ -55,7 +53,6 @@ export class contactweb extends Component {
     contactweb.callbackList.push({ Type: type, callback });
   }
 
-  /////待檢查
   public static Connect(uri: string) {
     // Create socket
     contactweb.uri = "ws://" + uri;
