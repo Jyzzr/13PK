@@ -1,6 +1,3 @@
-import { _decorator, Component, Node } from "cc";
-const { ccclass, property } = _decorator;
-
 interface CallbackFunc {
   Type: string;
   callback(data: object): Promise<void>;
@@ -71,7 +68,7 @@ export class contactweb {
       //
       while (contactweb.IsOpen) {
         if (contactweb.messageList.length > 0) {
-          let message = contactweb.messageList[0];
+          const message = contactweb.messageList[0];
           contactweb.messageList.shift();
           for (let i = 0; i < contactweb.callbackList.length; i++) {
             if (contactweb.callbackList[i].Type == message.Type) {
@@ -93,7 +90,7 @@ export class contactweb {
     };
 
     contactweb.ws.onmessage = async function (event) {
-      let data = JSON.parse(event.data);
+      const data = JSON.parse(event.data);
       contactweb.messageList.push(data);
     };
   }
