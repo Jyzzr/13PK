@@ -16,6 +16,7 @@ enum StateType {
   LOBBY,
   ROOM,
 }
+const ROOM_MAX_MEMBER = 4;
 
 @ccclass("Displayer")
 export class Displayer extends Component {
@@ -56,36 +57,6 @@ export class Displayer extends Component {
   private Room4Scene: Node = null;
 
   @property({
-    type: Number,
-    tooltip: "Room member",
-  })
-  private r: number = 4;
-
-  @property({
-    type: Number,
-    tooltip: "Room member",
-  })
-  private r1: number = 0;
-
-  @property({
-    type: Number,
-    tooltip: "Room member",
-  })
-  private r2: number = 0;
-
-  @property({
-    type: Number,
-    tooltip: "Room member",
-  })
-  private r3: number = 0;
-
-  @property({
-    type: Number,
-    tooltip: "Room member",
-  })
-  private r4: number = 0;
-
-  @property({
     type: EditBox,
     tooltip: "Name",
   })
@@ -113,25 +84,7 @@ export class Displayer extends Component {
     type: Button,
     tooltip: "JoinRoomButton",
   })
-  private JoinRoomButton1: Button = null;
-
-  @property({
-    type: Button,
-    tooltip: "JoinRoomButton",
-  })
-  private JoinRoomButton2: Button = null;
-
-  @property({
-    type: Button,
-    tooltip: "JoinRoomButton",
-  })
-  private JoinRoomButton3: Button = null;
-
-  @property({
-    type: Button,
-    tooltip: "JoinRoomButton",
-  })
-  private JoinRoomButton4: Button = null;
+  private JoinRoomButton: Button[] = [];
 
   @property({
     type: Button,
@@ -144,6 +97,8 @@ export class Displayer extends Component {
     tooltip: "SetCardButton",
   })
   private SetCardButton: Button = null;
+
+  private roomMemberNumberList: number[] = [0, 0, 0, 0];
 
   onLoad() {
     this.Room1Scene.active = false;
@@ -188,34 +143,19 @@ export class Displayer extends Component {
       contactweb.SendMessage("exit.lobby", "");
     });
 
-    this.JoinRoomButton1.node.on(NodeEventType.MOUSE_DOWN, () => {
-      if (this.r1 < this.r) {
-        this.r1++;
-        this.r1 = this.r1;
-      } else {
-        this.JoinRoomButton1.interactable = false;
-      }
-      this.LobbyScene.active = false;
-      this.Room1Scene.active = true;
-      contactweb.SendMessage("join.room", "");
-    });
-
-    this.JoinRoomButton2.node.on(NodeEventType.MOUSE_DOWN, () => {
-      this.LobbyScene.active = false;
-      this.Room2Scene.active = true;
-      contactweb.SendMessage("join.room", "");
-    });
-
-    this.JoinRoomButton3.node.on(NodeEventType.MOUSE_DOWN, () => {
-      this.LobbyScene.active = false;
-      this.Room3Scene.active = true;
-      contactweb.SendMessage("join.room", "");
-    });
-
-    this.JoinRoomButton4.node.on(NodeEventType.MOUSE_DOWN, () => {
-      this.LobbyScene.active = false;
-      this.Room4Scene.active = true;
-      contactweb.SendMessage("join.room", "");
+    this.JoinRoomButton.forEach((roombutton, index) => {
+      roombutton.node.on(NodeEventType.MOUSE_DOWN, () => {
+        if (this.roomMemberNumberList[index] < ROOM_MAX_MEMBER) {
+          this.roomMemberNumberList[index]++;
+          this.roomMemberNumberList[index] = this.roomMemberNumberList[index];
+          console.log(this.roomMemberNumberList[index]);
+        } else {
+          this.JoinRoomButton[index].interactable = false;
+        }
+        this.LobbyScene.active = false;
+        this.Room1Scene.active = true;
+        contactweb.SendMessage("join.room", "Room" + index);
+      });
     });
 
     this.ExitRoomButton.node.on(NodeEventType.MOUSE_DOWN, () => {
