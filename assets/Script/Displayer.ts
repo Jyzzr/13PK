@@ -73,6 +73,7 @@ export class Displayer extends Component {
 
     private roomMemberNumberList: number[] = [0, 0, 0, 0];
     private roomInfoList: RoomInfo[] = [];
+    private GameStart: boolean = false;
 
     onLoad() {
         this.Room1Scene.active = false;
@@ -124,10 +125,11 @@ export class Displayer extends Component {
                     console.log(this.roomMemberNumberList[index]);
                 } else {
                     this.JoinRoomButton[index].interactable = false;
+                    this.GameStart == true;
                 }
                 this.LobbyScene.active = false;
                 this.Room1Scene.active = true;
-                contactweb.SendMessage('join.room', "Gay's Room" + index);
+                contactweb.SendMessage('join.room', 'Room' + index);
             });
         });
 
